@@ -896,8 +896,12 @@ void Tally::GaussianEnergyBroadening::apply(Particle& p) const
   const double FWHM =
     a + b * std::sqrt(p.E_last() + c * p.E_last() * p.E_last());
 
+  // This coefficient is currently hard coded, as some compilers (mainly on
+  // Windows) can't evaluate the expression as constexpr.
+  // constexpr double sigma_coeff = 1. / (2. * std::sqrt(2. * std::log(2.)));
+  constexpr double sigma_coeff = 0.42466090014400953434; 
+  
   // Calculate sigma of the gaussian
-  constexpr double sigma_coeff = 1. / (2. * std::sqrt(2. * std::log(2.)));
   const double sigma = sigma_coeff * FWHM;
 
   // Save a copy of the original RNG stream, and set the stream for GEB
